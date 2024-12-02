@@ -9,10 +9,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
+import youngpil.backend.service.SignupService;
+
 @RestController
 @RequestMapping("api/v1/test")
+@RequiredArgsConstructor
 public class TestController {
-    
+    private final SignupService signupService;
+
     @GetMapping("t1")
     public String test() {
         return "test";
