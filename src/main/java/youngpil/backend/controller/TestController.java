@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import youngpil.backend.dto.request.SignupRequestDto;
 import youngpil.backend.service.SignupService;
+import youngpil.backend.tool.ResponseDto;
 
 @RestController
 @RequestMapping("api/v1/test")
@@ -24,9 +26,10 @@ public class TestController {
     }
 
     @PostMapping("t2")
-    public String secondTest(
-        @RequestBody String name
+    public ResponseEntity<ResponseDto> secondTest(
+        @RequestBody SignupRequestDto dto
     ) {
-        return "test";
+        ResponseEntity<ResponseDto> reponse = signupService.Signup(dto);
+        return reponse;
     }
 }
