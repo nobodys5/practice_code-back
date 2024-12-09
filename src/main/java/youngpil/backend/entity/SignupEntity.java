@@ -17,15 +17,18 @@ import youngpil.backend.dto.request.SignupRequestDto;
 @Entity(name="practice")
 @Table(name="signup")
 public class SignupEntity {
-    String name;
     @Id
     String userId;
+    @Column(name="name", nullable = false)
+    String name;
+    @Column(name="password", nullable = false)
     String password;
+    @Column(name="tel_Number", nullable = false, unique = true)
     String telNumber;
 
     public SignupEntity(SignupRequestDto dto) {
-        this.name = getName();
         this.userId = getUserId();
+        this.name = getName();
         this.password = getPassword();
         this.telNumber = getTelNumber();
     }

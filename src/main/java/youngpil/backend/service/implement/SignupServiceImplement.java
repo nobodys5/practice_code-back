@@ -27,6 +27,17 @@ public class SignupServiceImplement implements SignupService{
             boolean result  = signUpRepository.existsByUserId(userId);
             if (!result) return ResponseDto.databaseError();
 
+            // boolean resultname  = signUpRepository.existsByName(name);
+            // if (!resultname) return ResponseDto.databaseError();
+
+            // boolean resultpassword  = signUpRepository.existsByPassWord(password);
+            // if (!resultpassword) return ResponseDto.databaseError();
+
+            // boolean resulttelNumber  = signUpRepository.existsByTelNumber(telNumber);
+            // if (!resulttelNumber) return ResponseDto.databaseError();
+
+            SignupEntity signupEntity = new SignupEntity(dto);
+            signUpRepository.save(signupEntity);
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
