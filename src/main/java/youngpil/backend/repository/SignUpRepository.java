@@ -10,7 +10,9 @@ import java.util.List;
 @Repository
 public interface SignUpRepository extends JpaRepository<SignupEntity, String> {
     boolean existsByUserId(String userId);    
+    // boolean existsByName(String name);    
+    // boolean existsByEmail(String email);    
+    // boolean existsByPassword(String password);    
      
 
-    // SignupEntity findByUserId(String userId);
 }

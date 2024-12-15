@@ -6,5 +6,6 @@ import youngpil.backend.dto.request.SignupRequestDto;
 import youngpil.backend.tool.ResponseDto;
 
 public interface SignupService {
-    ResponseEntity<ResponseDto> Signup(SignupRequestDto dto);
+    ResponseEntity<String> Signup(SignupRequestDto dto);
+    ResponseEntity<String> delete(String userId);
 }

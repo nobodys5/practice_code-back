@@ -1,5 +1,7 @@
 package youngpil.backend.service.implement;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,31 +20,31 @@ public class SignupServiceImplement implements SignupService{
     private final SignUpRepository signUpRepository;
 
     @Override
-    public ResponseEntity<ResponseDto> Signup(SignupRequestDto dto) {
+    public ResponseEntity<String> Signup(SignupRequestDto dto) {
         String userId = dto.getUserId();
-        // String name = dto.getName();
-        // String password = dto.getPassword();
-        // String telNumber = dto.getTelNumber();
-        try {
-            boolean result  = signUpRepository.existsByUserId(userId);
-            if (!result) return ResponseDto.databaseError();
+        String name = dto.getName();
+        String email = dto.getEmail();
+        String password = dto.getPassword();
 
-            // boolean resultname  = signUpRepository.existsByName(name);
-            // if (!resultname) return ResponseDto.databaseError();
+        boolean result = signUpRepository.existsById(userId);
+        if (result) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 값입니다.");
 
-            // boolean resultpassword  = signUpRepository.existsByPassWord(password);
-            // if (!resultpassword) return ResponseDto.databaseError();
-
-            // boolean resulttelNumber  = signUpRepository.existsByTelNumber(telNumber);
-            // if (!resulttelNumber) return ResponseDto.databaseError();
-
-            SignupEntity signupEntity = new SignupEntity(dto);
-            signUpRepository.save(signupEntity);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return ResponseDto.databaseError();
-        }
-        return ResponseDto.success();
+        SignupEntity entity = new SignupEntity(userId, name, email, password);
+        signUpRepository.save(entity);
+       
+        return ResponseEntity.status(HttpStatus.CREATED).body("성공");
     }
+
+    @Override
+    public ResponseEntity<String> delete(String userId) {
+
+        // signUpRepository.deleteById(userId);
+
+        SignupEntity signupEntity = signUpRepository.findById(userId).get();
+        signUpRepository.delete(signupEntity);
+        return ResponseEntity.status(HttpStatus.OK).body("성공");
+    }
+
+    
     
 }
