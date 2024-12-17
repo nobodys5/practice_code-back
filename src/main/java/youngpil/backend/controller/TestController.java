@@ -44,4 +44,10 @@ public class TestController {
         ResponseEntity<String> response = signupService.delete(userId);
         return response;
     }
+
+    @GetMapping("")
+    public ResponseEntity<String> getsql() {
+        ResponseEntity<String> response = signupService.getsql();
+        return response;
+    }
 }

@@ -1,5 +1,7 @@
 package youngpil.backend.service.implement;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,15 @@ public class SignupServiceImplement implements SignupService{
         SignupEntity signupEntity = signUpRepository.findById(userId).get();
         signUpRepository.delete(signupEntity);
         return ResponseEntity.status(HttpStatus.OK).body("성공");
+    }
+
+    @Override
+    public ResponseEntity<String> getsql() {
+
+        List<SignupEntity> signupEntity = signUpRepository.getsql("홍길동");
+
+        return ResponseEntity.status(HttpStatus.OK).body(signupEntity.toString());
+
     }
 
     

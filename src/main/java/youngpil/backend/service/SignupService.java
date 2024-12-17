@@ -8,4 +8,5 @@ import youngpil.backend.tool.ResponseDto;
 public interface SignupService {
     ResponseEntity<String> Signup(SignupRequestDto dto);
     ResponseEntity<String> delete(String userId);
+    ResponseEntity<String> getsql();
 }
