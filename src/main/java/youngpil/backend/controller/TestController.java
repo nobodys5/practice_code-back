@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import youngpil.backend.dto.request.SignupRequestDto;
+import youngpil.backend.service.JwtService;
 import youngpil.backend.service.SignupService;
 import youngpil.backend.tool.ResponseDto;
 
@@ -23,6 +24,7 @@ import youngpil.backend.tool.ResponseDto;
 @RequiredArgsConstructor
 public class TestController {
     private final SignupService signupService;
+    private final JwtService jwtService;
 
     @GetMapping("/t1")
     public String test() {
@@ -49,5 +51,14 @@ public class TestController {
     public ResponseEntity<String> getsql() {
         ResponseEntity<String> response = signupService.getsql();
         return response;
+    }
+
+    @GetMapping("/jwt/{name}")
+    public String getjwt(
+        @PathVariable("name") String name
+    ) {
+        String response = jwtService.getjwt(name);
+        return response; 
+        
     }
 }
