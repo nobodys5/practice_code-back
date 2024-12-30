@@ -17,5 +17,12 @@ public class JwtServiceImplement implements JwtService{
 
         return jwt;
     }
+
+    @Override
+    public String validjwt(String jwt) {
+        String subject = jwtProvider.validate(jwt);
+
+        return subject;
+    }
     
 }

@@ -25,4 +25,6 @@ public interface SignUpRepository extends JpaRepository<SignupEntity, String> {
     List<SignupEntity> getsql(
         @Param("name") String name
     );
+
+    SignupEntity findByUserId(String userId);
 }

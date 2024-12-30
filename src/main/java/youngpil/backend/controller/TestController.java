@@ -1,9 +1,6 @@
 package youngpil.backend.controller;
 
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import youngpil.backend.dto.request.SignupRequestDto;
 import youngpil.backend.service.JwtService;
 import youngpil.backend.service.SignupService;
-import youngpil.backend.tool.ResponseDto;
 
 @RestController
 @RequestMapping("api/v1/test")
@@ -58,6 +54,11 @@ public class TestController {
         @PathVariable("name") String name
     ) {
         String response = jwtService.getjwt(name);
+        return response;
+    }
+    @PostMapping("/validate")
+    public String getvalidate(@RequestBody String jwt) {
+        String response = jwtService.validjwt(jwt);
         return response; 
         
     }

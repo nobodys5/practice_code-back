@@ -1,6 +1,5 @@
 package youngpil.backend.dto.request;
 
-import org.hibernate.validator.constraints.Length;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

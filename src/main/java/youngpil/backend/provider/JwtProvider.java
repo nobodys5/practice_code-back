@@ -9,6 +9,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -20,6 +21,7 @@ public class JwtProvider {
     private String secretkey;
 
     public String create(String name) {
+        
 
         Date expiredDate = Date.from(Instant.now().plus(4, ChronoUnit.HOURS));
         
@@ -34,5 +36,25 @@ public class JwtProvider {
         .compact();
 
         return jwt;
+    }
+
+    public String validate(String jwt) {
+
+        Claims claims = null;
+
+        Key key = Keys.hmacShaKeyFor(secretkey.getBytes(StandardCharsets.UTF_8));
+
+        try {
+            claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return null;
+        }
+        return claims.getSubject();
     }
 }
