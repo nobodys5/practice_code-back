@@ -14,29 +14,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import youngpil.backend.dto.request.PostUserRequestDto;
-import youngpil.backend.dto.request.SignupRequestDto;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity(name="movie")
-@Table(name="users")
+@Entity(name="auth")
+@Table(name="signup")
 @Builder
-public class SignupEntity {
+public class AuthEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     String userId;
     String name;
     String email;
     String password;
 
     // service에서 dto에 있는 객체를 받기위한 용도
-    public SignupEntity(PostUserRequestDto dto) {
-        this.userId = dto.getUserId();
-        this.name = dto.getName();
-        this.email = dto.getEmail();
-        this.password = dto.getPassword();
+    public AuthEntity(PostUserRequestDto dto) {
+        this.userId = getUserId();
+        this.name = getName();
+        this.email = getEmail();
+        this.password = getPassword();
     }
 
    
