@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import youngpil.backend.dto.request.PostUserRequestDto;
+import youngpil.backend.dto.request.SigninRequestDto;
 import youngpil.backend.service.AuthService;
 
 @RestController
@@ -30,6 +31,14 @@ public class AuthController {
         @RequestBody @Valid PostUserRequestDto dto
     ) {
         String result = authService.Signup(dto);
+        return result;
+    }
+
+    @PostMapping("/sign-in")
+    public String signin(
+        @RequestBody @Valid SigninRequestDto requestBody
+    ) {
+        String result = authService.Signin(requestBody);
         return result;
     }
 }
