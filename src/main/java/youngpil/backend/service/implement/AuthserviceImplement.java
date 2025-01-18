@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import youngpil.backend.dto.request.PostUserRequestDto;
 import youngpil.backend.dto.request.SigninRequestDto;
+import youngpil.backend.dto.request.TelAuthRequestDto;
 import youngpil.backend.entity.AuthEntity;
 import youngpil.backend.entity.SignupEntity;
 import youngpil.backend.provider.JwtProvider;
@@ -76,5 +77,16 @@ public class AuthserviceImplement implements AuthService {
             return "실패";
         }
     }
-    
+    @Override
+    public String Telauth(TelAuthRequestDto dto) {
+
+        try {
+            
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return "실패";
+        }
+        return "성공";
+    }
+
 }

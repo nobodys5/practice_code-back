@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import youngpil.backend.dto.request.PostUserRequestDto;
 import youngpil.backend.dto.request.SigninRequestDto;
+import youngpil.backend.dto.request.TelAuthRequestDto;
 import youngpil.backend.service.AuthService;
 
 @RestController
@@ -41,4 +42,13 @@ public class AuthController {
         String result = authService.Signin(requestBody);
         return result;
     }
+
+    @PostMapping("/tel-auth")
+    public String telAuth(
+        @RequestBody @Valid TelAuthRequestDto dto
+
+    ) {
+        return "성공";
+    } 
+    
 }

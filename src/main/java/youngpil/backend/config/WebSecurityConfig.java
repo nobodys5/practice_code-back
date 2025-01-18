@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,6 +25,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import youngpil.backend.filter.JwtAuthenticationFilter;
+import youngpil.backend.handler.OAuth2SuccessHandler;
+import youngpil.backend.service.implement.OAuth2ServiceImplement;
 
 @Configurable
 @Configuration
@@ -31,7 +34,9 @@ import youngpil.backend.filter.JwtAuthenticationFilter;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuth2ServiceImplement oAuth2Service;
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity security) throws Exception {
@@ -42,16 +47,25 @@ public class WebSecurityConfig {
         .csrf(CsrfConfigurer::disable)
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests(request -> request
-        .requestMatchers("anyone/**", "/auth/**").permitAll()
-        .requestMatchers(HttpMethod.GET, "/api/v1/test/jwt/*").permitAll()
-        .requestMatchers("admin/**").hasRole("ADMIN")
-        .requestMatchers("user/**").authenticated()
-        .requestMatchers(HttpMethod.POST, "/notice").hasRole("ADMIN")
+        .requestMatchers("anyone/**", "/auth/**", "oauth2/callback/*").permitAll()
+        // .requestMatchers(HttpMethod.GET, "/api/v1/test/jwt/*").permitAll()
+        // .requestMatchers("admin/**").hasRole("ADMIN")
+        // .requestMatchers("user/**").authenticated()
+        // .requestMatchers(HttpMethod.POST, "/notice").hasRole("ADMIN")
         .anyRequest().authenticated()
         )
 
         .exceptionHandling(exceptionHandling -> exceptionHandling
         .authenticationEntryPoint(new FailedAuthenticationEntryPoint()))
+
+        .oauth2Login(oauth2 -> oauth2
+        .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
+        .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/sns-sign-in"))
+        .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2Service))
+        .successHandler(oAuth2SuccessHandler)
+        
+        )
+
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return security.build();
     }
