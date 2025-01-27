@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import youngpil.backend.entity.TelAuthEntity;
 
 @Repository
-public interface TelAuthRepository extends JpaRepository<TelAuthEntity, String> {
-    boolean existsByTelNumber(String TelNumber);
+public interface TelAuthCheckRepository extends JpaRepository<TelAuthEntity, String>{
+    boolean existsByTelNumberAndAuthNumber(String telNumber, String authNumber);
 }
