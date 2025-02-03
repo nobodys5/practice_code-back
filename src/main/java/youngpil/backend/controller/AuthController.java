@@ -1,5 +1,6 @@
 package youngpil.backend.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,10 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import youngpil.backend.dto.request.IdCheckRequestDto;
 import youngpil.backend.dto.request.PostUserRequestDto;
 import youngpil.backend.dto.request.SigninRequestDto;
 import youngpil.backend.dto.request.TelAuthCheckRequestDto;
 import youngpil.backend.dto.request.TelAuthRequestDto;
+import youngpil.backend.dto.response.ResponseDto;
 import youngpil.backend.service.AuthService;
 
 @RestController
@@ -58,6 +61,14 @@ public class AuthController {
         @RequestBody @Valid TelAuthCheckRequestDto dto
     ) {
         String response = authService.TelauthCheck(dto);
+        return response;
+    }
+
+    @PostMapping("/id-check")
+    public ResponseEntity<ResponseDto> idCheck(
+        @RequestBody @Valid IdCheckRequestDto dto
+    ) {
+        ResponseEntity<ResponseDto> response = authService.idCheck(dto);
         return response;
     }
 }

@@ -1,15 +1,19 @@
 package youngpil.backend.service.implement;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import youngpil.backend.common.utill.object.AuthNumberCreator;
+import youngpil.backend.dto.request.IdCheckRequestDto;
 import youngpil.backend.dto.request.PostUserRequestDto;
 import youngpil.backend.dto.request.SigninRequestDto;
 import youngpil.backend.dto.request.TelAuthCheckRequestDto;
 import youngpil.backend.dto.request.TelAuthRequestDto;
+import youngpil.backend.dto.response.ResponseDto;
 import youngpil.backend.entity.AuthEntity;
 import youngpil.backend.entity.SignupEntity;
 import youngpil.backend.entity.TelAuthEntity;
@@ -122,5 +126,18 @@ public class AuthserviceImplement implements AuthService {
         }
         return "성공";
     }
+    @Override
+    public ResponseEntity<ResponseDto> idCheck(IdCheckRequestDto dto) {
+        try {
+            String userId = dto.getUserId();
+            boolean result = signUpRepository.existsByUserId(userId);
+            if (result) return ResponseDto.Duplicated();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.DatabaseError();
+        }
+        return ResponseDto.Success();
+    }
+   
 
 }
