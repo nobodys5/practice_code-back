@@ -11,9 +11,11 @@ import youngpil.backend.common.utill.object.AuthNumberCreator;
 import youngpil.backend.dto.request.IdCheckRequestDto;
 import youngpil.backend.dto.request.PostUserRequestDto;
 import youngpil.backend.dto.request.SigninRequestDto;
+import youngpil.backend.dto.request.SigninRequestDtoSecond;
 import youngpil.backend.dto.request.TelAuthCheckRequestDto;
 import youngpil.backend.dto.request.TelAuthRequestDto;
 import youngpil.backend.dto.response.ResponseDto;
+import youngpil.backend.dto.response.SignInResponseDto;
 import youngpil.backend.entity.AuthEntity;
 import youngpil.backend.entity.SignupEntity;
 import youngpil.backend.entity.TelAuthEntity;
@@ -137,6 +139,29 @@ public class AuthserviceImplement implements AuthService {
             return ResponseDto.DatabaseError();
         }
         return ResponseDto.Success();
+    }
+    @Override
+    public ResponseEntity<? super SignInResponseDto> Signin(SigninRequestDtoSecond dto) {
+        String userId = dto.getUserId();
+        String password = dto.getPassword();
+        String accessToken = null;
+        
+        try {
+            SignupEntity signupEntity = signUpRepository.findByUserId(userId);
+            if (signupEntity == null) return ResponseDto.Duplicated();
+
+           String passwordEncord = signupEntity.getPassword();
+           boolean isMatched = passwordEncoder.matches(password, passwordEncord);
+            if (!isMatched) return ResponseDto.SigninFail();
+
+            accessToken = jwtProvider.create(userId);
+            if (accessToken == null) return ResponseDto.TokenCreateFail();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.DatabaseError();
+        }
+        return SignInResponseDto.success(accessToken);
     }
    
 

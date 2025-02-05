@@ -13,9 +13,11 @@ import lombok.RequiredArgsConstructor;
 import youngpil.backend.dto.request.IdCheckRequestDto;
 import youngpil.backend.dto.request.PostUserRequestDto;
 import youngpil.backend.dto.request.SigninRequestDto;
+import youngpil.backend.dto.request.SigninRequestDtoSecond;
 import youngpil.backend.dto.request.TelAuthCheckRequestDto;
 import youngpil.backend.dto.request.TelAuthRequestDto;
 import youngpil.backend.dto.response.ResponseDto;
+import youngpil.backend.dto.response.SignInResponseDto;
 import youngpil.backend.service.AuthService;
 
 @RestController
@@ -69,6 +71,14 @@ public class AuthController {
         @RequestBody @Valid IdCheckRequestDto dto
     ) {
         ResponseEntity<ResponseDto> response = authService.idCheck(dto);
+        return response;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<? super SignInResponseDto> login(
+        @RequestBody @Valid SigninRequestDtoSecond reqeustBody
+    ) {
+        ResponseEntity<? super SignInResponseDto> response = authService.Signin(reqeustBody);
         return response;
     }
 }

@@ -33,4 +33,16 @@ public class ResponseDto {
         ResponseDto responseBody = new ResponseDto(ResponseCode.Validation_Fail, ResponseMessage.Validation_Fail);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
+    public static ResponseEntity<ResponseDto> TelauthFail() {
+        ResponseDto responseBody = new ResponseDto(ResponseCode.TEL_AUTH_Fail, ResponseMessage.TEL_AUTH_Fail);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+    }
+    public static ResponseEntity<ResponseDto> SigninFail() {
+        ResponseDto responseBody = new ResponseDto(ResponseCode.SIGN_IN_Fail, ResponseMessage.SIGN_IN_Fail);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+    }
+    public static ResponseEntity<ResponseDto> TokenCreateFail() {
+        ResponseDto responseBody = new ResponseDto(ResponseCode.TOKEN_CREATE_Fail, ResponseMessage.TOKEN_CREATE_Fail);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+    }
 }
