@@ -14,6 +14,7 @@ import youngpil.backend.dto.request.IdCheckRequestDto;
 import youngpil.backend.dto.request.PostUserRequestDto;
 import youngpil.backend.dto.request.SigninRequestDto;
 import youngpil.backend.dto.request.SigninRequestDtoSecond;
+import youngpil.backend.dto.request.SignupRequestSecondDto;
 import youngpil.backend.dto.request.TelAuthCheckRequestDto;
 import youngpil.backend.dto.request.TelAuthRequestDto;
 import youngpil.backend.dto.response.ResponseDto;
@@ -41,6 +42,14 @@ public class AuthController {
         return result;
     }
 
+    @PostMapping("/signup-second")
+    public ResponseEntity<ResponseDto> signUpSecond(
+        @RequestBody @Valid SignupRequestSecondDto dto
+    ) {
+        ResponseEntity<ResponseDto> result = authService.SignupSecond(dto);
+        return result;
+    }
+
     @PostMapping("/sign-in")
     public String signin(
         @RequestBody @Valid SigninRequestDto requestBody
@@ -50,19 +59,19 @@ public class AuthController {
     }
 
     @PostMapping("/tel-auth")
-    public String telAuth(
+    public ResponseEntity<ResponseDto> telAuth(
         @RequestBody @Valid TelAuthRequestDto dto
 
     ) {
-        String result = authService.Telauth(dto);
+        ResponseEntity<ResponseDto> result = authService.Telauth(dto);
         return result;
     } 
 
     @PostMapping("/telauth-check")
-    public String telAuthCheck(
+    public ResponseEntity<ResponseDto> telAuthCheck(
         @RequestBody @Valid TelAuthCheckRequestDto dto
     ) {
-        String response = authService.TelauthCheck(dto);
+        ResponseEntity<ResponseDto> response = authService.TelauthCheck(dto);
         return response;
     }
 

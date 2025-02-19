@@ -7,5 +7,5 @@ import youngpil.backend.entity.TelAuthEntity;
 
 @Repository
 public interface TelAuthRepository extends JpaRepository<TelAuthEntity, String> {
-    boolean existsByTelNumber(String TelNumber);
+    boolean existsByTelNumber(String telNumber);
 }

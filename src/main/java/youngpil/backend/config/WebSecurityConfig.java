@@ -47,11 +47,8 @@ public class WebSecurityConfig {
         .csrf(CsrfConfigurer::disable)
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests(request -> request
-        .requestMatchers("anyone/**", "/auth/**", "oauth2/callback/*").permitAll()
+        .requestMatchers( "/auth/**", "oauth2/callback/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/test/jwt/*").permitAll()
-        .requestMatchers("admin/**").hasRole("ADMIN")
-        .requestMatchers("user/**").authenticated()
-        .requestMatchers(HttpMethod.POST, "/notice").hasRole("ADMIN")
         .anyRequest().authenticated()
         )
 

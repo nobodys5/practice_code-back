@@ -12,16 +12,19 @@ import youngpil.backend.dto.request.IdCheckRequestDto;
 import youngpil.backend.dto.request.PostUserRequestDto;
 import youngpil.backend.dto.request.SigninRequestDto;
 import youngpil.backend.dto.request.SigninRequestDtoSecond;
+import youngpil.backend.dto.request.SignupRequestSecondDto;
 import youngpil.backend.dto.request.TelAuthCheckRequestDto;
 import youngpil.backend.dto.request.TelAuthRequestDto;
 import youngpil.backend.dto.response.ResponseDto;
 import youngpil.backend.dto.response.SignInResponseDto;
 import youngpil.backend.entity.AuthEntity;
+import youngpil.backend.entity.SecondSignupEntity;
 import youngpil.backend.entity.SignupEntity;
 import youngpil.backend.entity.TelAuthEntity;
 import youngpil.backend.provider.JwtProvider;
 import youngpil.backend.provider.SmsProvider;
 import youngpil.backend.repository.AuthRepository;
+import youngpil.backend.repository.SecondSignupRepository;
 import youngpil.backend.repository.SignUpRepository;
 import youngpil.backend.repository.TelAuthCheckRepository;
 import youngpil.backend.repository.TelAuthRepository;
@@ -33,6 +36,7 @@ public class AuthserviceImplement implements AuthService {
 
     // private final AuthRepository authRepository;
     private final SignUpRepository signUpRepository;
+    private final SecondSignupRepository secondSignupRepository ;
     private final TelAuthRepository telAuthRepository;
     private final TelAuthCheckRepository telAuthCheckRepository;
 
@@ -93,40 +97,48 @@ public class AuthserviceImplement implements AuthService {
         }
     }
     @Override
-    public String Telauth(TelAuthRequestDto dto) {
+    public ResponseEntity<ResponseDto> Telauth(TelAuthRequestDto dto) {
 
+        String telNumber = dto.getTelNumber();
         try {
-            String telNumber = dto.getTelNumber();
             boolean result = telAuthRepository.existsByTelNumber(telNumber);
-            if (result) return "존재하는 전화번호 입니다.";
+            if (result) return ResponseDto.DuplicatedTelNumber();
 
-            String authNumber = AuthNumberCreator.number();
-
-            boolean isSend = smsProvider.SendMessage(telNumber, authNumber);
-            if(!isSend) return "인증번호가 틀립니다.";
-
-            TelAuthEntity telAuthEntity = new TelAuthEntity(telNumber, authNumber);
-            telAuthRepository.save(telAuthEntity);
+            
         } catch (Exception exception) {
             exception.printStackTrace();
-            return "예외 발생";
+            return ResponseDto.DatabaseError();
+            
         }
-        return "성공";
+        
+            String authNumber = AuthNumberCreator.number();
+            boolean isSend = smsProvider.SendMessage(telNumber, authNumber);
+            if (!isSend) return ResponseDto.TelauthFail();
+
+            try {
+                TelAuthEntity telAuthEntity = new TelAuthEntity(telNumber, authNumber);
+                telAuthRepository.save(telAuthEntity);
+            
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                ResponseDto.DatabaseError();
+            }
+        return ResponseDto.Success();
     }
     @Override
-    public String TelauthCheck(TelAuthCheckRequestDto dto) {
+    public ResponseEntity<ResponseDto> TelauthCheck(TelAuthCheckRequestDto dto) {
 
         try {
             String TelNumber = dto.getTelNumber();
             String AuthNumber = dto.getAuthNumber();
             
             boolean result = telAuthCheckRepository.existsByTelNumberAndAuthNumber(TelNumber, AuthNumber);
-            if (!result) return "인증번호가 일치하지 않습니다.";
+            if (!result) return ResponseDto.TelauthFail();
         } catch (Exception exception) {
             exception.printStackTrace();
-            return "예외 발생";
+            return ResponseDto.DatabaseError();
         }
-        return "성공";
+        return ResponseDto.Success();
     }
     @Override
     public ResponseEntity<ResponseDto> idCheck(IdCheckRequestDto dto) {
@@ -147,10 +159,10 @@ public class AuthserviceImplement implements AuthService {
         String accessToken = null;
         
         try {
-            SignupEntity signupEntity = signUpRepository.findByUserId(userId);
-            if (signupEntity == null) return ResponseDto.Duplicated();
+            SecondSignupEntity secondSignupEntity = secondSignupRepository.findByUserId(userId);
+            if (secondSignupEntity == null) return ResponseDto.Duplicated();
 
-           String passwordEncord = signupEntity.getPassword();
+           String passwordEncord = secondSignupEntity.getPassword();
            boolean isMatched = passwordEncoder.matches(password, passwordEncord);
             if (!isMatched) return ResponseDto.SigninFail();
 
@@ -162,6 +174,34 @@ public class AuthserviceImplement implements AuthService {
             return ResponseDto.DatabaseError();
         }
         return SignInResponseDto.success(accessToken);
+    }
+    @Override
+    public ResponseEntity<ResponseDto> SignupSecond(SignupRequestSecondDto dto) {
+        String userId = dto.getUserId();
+        String password = dto.getPassword();
+        String telNumber = dto.getTelNumber();
+        String authNumber = dto.getAuthNumber();
+        try {
+            boolean isExsitedId = secondSignupRepository.existsByUserId(userId); 
+            if (isExsitedId) return ResponseDto.Duplicated();
+
+            boolean isExsitedTelNumber = secondSignupRepository.existsByTelNumber(telNumber); 
+            if (isExsitedTelNumber) return ResponseDto.DuplicatedTelNumber();
+
+            boolean isMatched = telAuthCheckRepository.existsByTelNumberAndAuthNumber(telNumber, authNumber); 
+            if (!isMatched) return ResponseDto.TelauthFail();
+
+            String encodedPassword = passwordEncoder.encode(password);
+            dto.setPassword(encodedPassword);
+
+
+            SecondSignupEntity secondSignupEntity = new SecondSignupEntity(dto);
+            secondSignupRepository.save(secondSignupEntity);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.DatabaseError();
+        }
+        return ResponseDto.Success();
     }
    
 
