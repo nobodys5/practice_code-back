@@ -47,7 +47,7 @@ public class WebSecurityConfig {
         .csrf(CsrfConfigurer::disable)
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests(request -> request
-        .requestMatchers( "/auth/**", "oauth2/callback/*").permitAll()
+        .requestMatchers( "/auth/**", "oauth2/callback/*", "api/v1/auth/**").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/v1/test/jwt/*").permitAll()
         .anyRequest().authenticated()
         )

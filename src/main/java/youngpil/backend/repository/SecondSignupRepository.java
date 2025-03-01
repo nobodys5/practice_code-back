@@ -10,5 +10,6 @@ public interface SecondSignupRepository extends JpaRepository<SecondSignupEntity
     boolean existsByUserId(String userId); 
     boolean existsByTelNumber(String telNumber); 
     SecondSignupEntity findByUserId(String userId);
-    SecondSignupEntity findBySnsIdAndJoinPath(String snsId, String joinPath);
+    SecondSignupEntity findFirstBySnsIdAndJoinPath(String sns, String joinPath);
+    SecondSignupEntity findBySnsIdAndJoinPath(String sns, String joinPath);
 }

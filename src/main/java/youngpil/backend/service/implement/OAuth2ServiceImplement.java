@@ -12,14 +12,17 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import youngpil.backend.common.utill.object.CustomeOAuth2User;
 import youngpil.backend.entity.OAuth2Entity;
+import youngpil.backend.entity.SecondSignupEntity;
 import youngpil.backend.provider.JwtProvider;
 import youngpil.backend.repository.OAuth2Repository;
+import youngpil.backend.repository.SecondSignupRepository;
 
 @Service
 @RequiredArgsConstructor
 public class OAuth2ServiceImplement extends DefaultOAuth2UserService {
     private final JwtProvider jwtProvider;
     private final OAuth2Repository oAuth2Repository;
+    private final SecondSignupRepository secondSignupRepository;
 
 
     @Override
@@ -30,17 +33,17 @@ public class OAuth2ServiceImplement extends DefaultOAuth2UserService {
 
         String snsId = getSnsId(oAuth2User, registration);
 
-        OAuth2Entity oAuth2Entity = oAuth2Repository.findBySnsIdAndJoinPath(snsId, snsId); 
+        SecondSignupEntity secondSignupEntity = secondSignupRepository.findFirstBySnsIdAndJoinPath(snsId, registration); 
         
         CustomeOAuth2User customeOAuth2User = null;
 
-        if (oAuth2Entity == null) {
+        if (secondSignupEntity == null) {
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("snsId", snsId);
             attributes.put("joinPath", registration);
             customeOAuth2User = new CustomeOAuth2User(snsId, attributes, false);
         } else {
-            String userId = oAuth2Entity.getUserId();
+            String userId = secondSignupEntity.getUserId();
             String token = jwtProvider.create(userId);
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("accessToken", token);
