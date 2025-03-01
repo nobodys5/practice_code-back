@@ -29,6 +29,10 @@ public class ResponseDto {
         ResponseDto responseBody = new ResponseDto(ResponseCode.DUPLICATED_TELNUMBER, ResponseMessage.DUPLICATED_TELNUMBER);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
+    public static ResponseEntity<ResponseDto> NoExistUserId() {
+        ResponseDto responseBody = new ResponseDto(ResponseCode.NO_EXIST_USER_ID, ResponseMessage.NO_EXIST_USER_ID);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+    }
     public static ResponseEntity<ResponseDto> ValidationFail() {
         ResponseDto responseBody = new ResponseDto(ResponseCode.Validation_Fail, ResponseMessage.Validation_Fail);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);

@@ -24,6 +24,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import youngpil.backend.dto.response.ResponseCode;
+import youngpil.backend.dto.response.ResponseMessage;
 import youngpil.backend.filter.JwtAuthenticationFilter;
 import youngpil.backend.handler.OAuth2SuccessHandler;
 import youngpil.backend.service.implement.OAuth2ServiceImplement;
@@ -54,6 +56,9 @@ public class WebSecurityConfig {
 
         .exceptionHandling(exceptionHandling -> exceptionHandling
         .authenticationEntryPoint(new FailedAuthenticationEntryPoint()))
+
+        .exceptionHandling(exception -> exception
+        .authenticationEntryPoint(new AuthenticationFailEntryPoint()))
 
         .oauth2Login(oauth2 -> oauth2
         .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
@@ -93,4 +98,17 @@ class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 response.getWriter().write("{\"message\":\"인증 및 인가에 실패하였습니다.\"}");
     }
     
+    
+}
+class AuthenticationFailEntryPoint implements AuthenticationEntryPoint {
+    
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException authException) throws IOException, ServletException {
+                authException.printStackTrace();
+                response.setContentType("application/json");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"code\": \"" + ResponseCode.AUTHENTICATION_Fail + "\", \"message\": \"" + ResponseMessage.AUTHENTICATION_Fail + "\"}");
+                
+        }
 }
