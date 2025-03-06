@@ -16,7 +16,7 @@ import youngpil.backend.dto.request.SignupRequestSecondDto;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "Login")
-@Table(name = "signupsecond")
+@Table(name = "nurses")
 public class SecondSignupEntity {
     @Id
     private String userId;

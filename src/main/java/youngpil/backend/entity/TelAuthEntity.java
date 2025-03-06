@@ -14,7 +14,7 @@ import youngpil.backend.dto.request.TelAuthRequestDto;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "telNumber")
-@Table(name = "telauth")
+@Table(name = "tel_auth_number")
 public class TelAuthEntity {
     @Id
     private String telNumber;

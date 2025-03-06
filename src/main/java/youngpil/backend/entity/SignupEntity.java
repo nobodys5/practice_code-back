@@ -21,7 +21,7 @@ import youngpil.backend.dto.request.SignupRequestDto;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity(name="movie")
+@Entity(name="test")
 @Table(name="users")
 @Builder
 public class SignupEntity {

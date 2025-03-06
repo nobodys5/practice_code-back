@@ -13,6 +13,7 @@ public interface ResponseCode {
     String DUPLICATED_USER_ID = "DI";
     String DUPLICATED_TELNUMBER = "DT";
     String NO_EXIST_USER_ID = "NI";
+    String NO_EXIST_TOOL = "NT";
 
     
     String DATABASE_ERROR = "DBE";

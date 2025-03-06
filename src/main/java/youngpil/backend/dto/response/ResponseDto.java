@@ -33,6 +33,10 @@ public class ResponseDto {
         ResponseDto responseBody = new ResponseDto(ResponseCode.NO_EXIST_USER_ID, ResponseMessage.NO_EXIST_USER_ID);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
+    public static ResponseEntity<ResponseDto> NoExistTool() {
+        ResponseDto responseBody = new ResponseDto(ResponseCode.NO_EXIST_TOOL, ResponseMessage.NO_EXIST_TOOL);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+    }
     public static ResponseEntity<ResponseDto> ValidationFail() {
         ResponseDto responseBody = new ResponseDto(ResponseCode.Validation_Fail, ResponseMessage.Validation_Fail);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
