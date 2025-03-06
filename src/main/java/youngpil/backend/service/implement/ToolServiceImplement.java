@@ -66,6 +66,25 @@ public class ToolServiceImplement implements ToolService{
     public ResponseEntity<ResponseDto> patchTool(Integer toolNumber, PatchToolRequestDto dto) {
         try {
             
+            ToolEntity toolEntity = toolRepository.findByToolNumber(toolNumber);
+            if (toolEntity == null) return ResponseDto.NoExistTool();
+
+            toolEntity.patch(dto);
+            toolRepository.save(toolEntity);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.DatabaseError();
+        }
+        return ResponseDto.Success();
+    }
+    @Override
+    public ResponseEntity<ResponseDto> deleteTool(Integer toolNumber) {
+        try {
+            ToolEntity toolEntity = toolRepository.findByToolNumber(toolNumber);
+            if (toolEntity == null) return ResponseDto.NoExistTool();
+
+            toolRepository.delete(toolEntity);
+            
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.DatabaseError();

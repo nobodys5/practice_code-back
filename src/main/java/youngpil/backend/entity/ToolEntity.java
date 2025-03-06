@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import youngpil.backend.dto.request.tool.PatchToolRequestDto;
 import youngpil.backend.dto.request.tool.PostToolRequestDto;
 
 @NoArgsConstructor
@@ -27,6 +28,12 @@ public class ToolEntity {
     private Integer count;
 
     public ToolEntity(PostToolRequestDto dto) {
+        this.name = dto.getName();
+        this.purpose = dto.getPurpose();
+        this.count = dto.getCount();
+    }
+
+    public void patch(PatchToolRequestDto dto) {
         this.name = dto.getName();
         this.purpose = dto.getPurpose();
         this.count = dto.getCount();

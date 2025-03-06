@@ -14,4 +14,5 @@ public interface ToolService {
     ResponseEntity<? super GetToolListResponseDto> getTool();
     ResponseEntity<? super GetToolResponseDto> getToolSecond(Integer toolNumber);
     ResponseEntity<ResponseDto> patchTool(Integer toolNumber, PatchToolRequestDto dto);
+    ResponseEntity<ResponseDto> deleteTool(Integer toolNumber);
 }
